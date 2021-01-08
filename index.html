@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Decrypt Incremental Adventures</title>
+  <title>Edit Incremental Adventures Save Game</title>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/aes.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -91,6 +91,18 @@
       text-align: center;
       width: 150px;
     }
+
+    #footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      padding: 2px 16px;
+      border-top: solid 1px;
+      left: 0;
+      display: flex;
+      justify-content: space-between;
+    }
+
   </style>
 </head>
 
@@ -273,6 +285,15 @@
           <td class="autobuyer"><input type="checkbox" /></td>
         </tr>
       </table>
+    </div>
+  </div>
+  <div id="footer">
+    <div>
+      <span>Source: </span>
+      <a href="https://github.com/fochlac/IncrementalAdventuresSaveEditor/">
+        https://github.com/fochlac/IncrementalAdventuresSaveEditor/
+      </a>
+
     </div>
   </div>
 </body>
