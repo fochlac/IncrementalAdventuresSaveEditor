@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Decrypt Incremental Adventures</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/aes.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      padding: 8px;
+    }
+
+    td {
+      padding: 2px 6px;
+      margin-top: 2px;
+    }
+
+    tr:nth-child(2n) {
+      background: whitesmoke;
+    }
+
+    table {
+      border-spacing: 0 5px;
+      width: 100%;
+    }
+
+    label {
+      display: block;
+      margin-top: 2px;
+    }
+
+    h4 {
+      font-size: 20px;
+    }
+
+    textarea {
+      width: 100%;
+      max-width: 100%;
+    }
+
+    #resetTimeButton {
+      margin-bottom: 20px;
+    }
+
+    h4 {
+      margin-bottom: 4px;
+    }
+
+    .template {
+      display: none;
+    }
+
+    button {
+      margin-top: 6px;
+    }
+
+    div.left {
+      flex-basis: 50%;
+      flex: 1 1;
+    }
+
+    div.right {
+      flex-basis: 50%;
+      flex: 1 1;
+      margin-left: 16px;
+    }
+
+    div.editor {
+      display: flex;
+    }
+
+    input[type="checkbox"]+label {
+      display: inline-block;
+      margin-left: 4px;
+      margin-top: 0px;
+    }
+
+    input[type="checkbox"] {
+      width: auto;
+    }
+
+    tr {
+      text-align: center;
+    }
+
+    input {
+      text-align: center;
+      width: 150px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="editor">
+    <div class="left">
+      <label for="input">Paste your save game here</label>
+      <textarea name="" id="input" cols="30" rows="5"></textarea>
+    </div>
+    <div class="right">
+      <label for="output">Copy your new save game</label>
+      <textarea name="" id="output" cols="30" rows="5" disabled></textarea>
+    </div>
+  </div>
+  <div class="editor">
+    <div class="left">
+      <h4>Offline time: <span id="offline"></span></h4>
+      <div>
+        <label for="">Add: </label>
+        <button id="offline1h">1h</button>
+        <button id="offline6h">6h</button>
+        <button id="offline12h">12h</button>
+        <button id="offline24h">24h</button>
+        <button id="offline48h">48h</button>
+      </div>
+      <h4>Heros:</h4>
+      <div>
+        <label for="highestFloor">Highest Floor (increases stats + count)</label>
+        <input type="text" id="highestFloor" />
+        <label for="heroLevel">Level</label>
+        <input type="text" id="heroLevel" />
+      </div>
+      <h4>Change Gold:</h4>
+      <div>
+        <input type="text" id="gold" />
+      </div>
+      <div>
+        <h4>Armory:</h4>
+        <table>
+          <thead>
+            <tr>
+              <th>Warrior</th>
+              <th>Cleric</th>
+              <th>Ranger</th>
+              <th>Paladin</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <label for="sword">Sword</label>
+                <input type="number" min="0" step="1" id="sword" />
+              </td>
+              <td>
+                <label for="staff">Staff</label>
+                <input type="number" min="0" step="1" id="staff" />
+              </td>
+              <td>
+                <label for="Bow">Bow</label>
+                <input type="number" min="0" step="1" id="Bow" />
+              </td>
+              <td>
+                <label for="Hammer">Hammer</label>
+                <input type="number" min="0" step="1" id="Hammer" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="Shield">Shield</label>
+                <input type="number" min="0" step="1" id="Shield" />
+              </td>
+              <td>
+                <label for="Cape">Cape</label>
+                <input type="number" min="0" step="1" id="Cape" />
+              </td>
+              <td>
+                <label for="Arrows">Arrows</label>
+                <input type="number" min="0" step="1" id="Arrows" />
+              </td>
+              <td>
+                <label for="Banner">Banner</label>
+                <input type="number" min="0" step="1" id="Banner" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <label for="Trinket">Trinket</label>
+                <input type="number" min="0" max="10" step="1" id="Trinket" />
+              </td>
+              <td>
+                <label for="Book">Book</label>
+                <input type="number" min="0" max="10" step="1" id="Book" />
+              </td>
+              <td>
+                <label for="Quiver">Quiver</label>
+                <input type="number" min="0" max="10" step="1" id="Quiver" />
+              </td>
+              <td>
+                <label for="Ring">Ring</label>
+                <input type="number" min="0" max="10" step="1" id="Ring" />
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" id="Greaves" />
+                <label for="Greaves">Greaves</label>
+              </td>
+              <td>
+                <input type="checkbox" id="Wand" />
+                <label for="Wand">Wand</label>
+              </td>
+              <td>
+                <input type="checkbox" id="Gloves" />
+                <label for="Gloves">Gloves</label>
+              </td>
+              <td>
+                <input type="checkbox" id="Tome" />
+                <label for="Tome">Tome</label>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <input type="checkbox" id="Challengers" />
+                <label for="Challengers">Heirloom of Challengers</label>
+              </td>
+              <td>
+                <input type="checkbox" id="Champions" />
+                <label for="Champions">Heirloom of Champions</label>
+              </td>
+              <td>
+                <input type="checkbox" id="Legends" />
+                <label for="Legends">Heirloom of Legends</label>
+              </td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="right">
+      <div>
+        <h4>Ascension Layers:</h4>
+        <label for="ascPerk">Perk Points</label>
+        <input type="number" min="0" step="1" id="ascPerk" />
+
+        <table id="ascTable">
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>Available Points</th>
+              <th>Upgrade Count</th>
+              <th>Autobuyer</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button id="addAsc">Unlock Ascension Layer</button>
+      </div>
+      <div>
+        <h4>Transcension Layers:</h4>
+        <label for="transPerk">Perk Points</label>
+        <input type="number" min="0" max="1e+25" step="1" id="transPerk" />
+        <table id="transcensionTable">
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>Available Points</th>
+              <th>Upgrade Count</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+        <button id="addTranscension">Unlock Transcension Layer</button>
+      </div>
+      <table class="template">
+        <tr class="asc-row">
+          <td class="layer"></td>
+          <td class="points"><input type="text" /></td>
+          <td class="upgrades"><input type="text" /></td>
+          <td class="autobuyer"><input type="checkbox" /></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+<script>
+  const { AES, enc } = CryptoJS;
+  window.Save = "";
+  const write = () => {
+    $("#offline").html(
+      Math.min(Math.round((Date.now() - window.Save.lastTimeStamp) / 3600000), 48)
+    );
+    $("#output").val(AES.encrypt(JSON.stringify(window.Save), "gwFgN"));
+    renderTranscensions();
+    renderAscensions();
+  };
+  function renderAscensions() {
+    const save = window.Save;
+    $("#ascTable tbody").html("");
+
+    save.ascension &&
+      save.ascension.forEach((layer, index) => {
+        const row = $(".template .asc-row").first().clone();
+        row.find(".layer").html(index + 1);
+        row.find(".points input").val(layer[0]);
+        row.find(".upgrades input").val(layer[1]);
+        row.find(".autobuyer input").prop("checked", layer[2]);
+        row.find(".points input").on("change", (e) => {
+          save.ascension[index][0] = e.target.value;
+          write();
+        });
+        row.find(".upgrades input").on("change", (e) => {
+          save.ascension[index][1] = e.target.value;
+          write();
+        });
+        row.find(".autobuyer input").on("change", (e) => {
+          save.ascension[index][2] = e.target.checked ? 1 : 0;
+          write();
+        });
+
+        $("#ascTable tbody").append(row);
+      });
+  }
+
+  function renderTranscensions() {
+    const save = window.Save;
+    $("#transcensionTable tbody").html("");
+
+    save.transcension &&
+      save.transcension.forEach((layer, index) => {
+        const row = $(".template .asc-row").first().clone();
+        row.find(".layer").html(index + 1);
+        row.find(".points input").val(layer[0]);
+        row.find(".upgrades input").val(layer[1]);
+        row.find(".autobuyer").remove()
+        row.find(".points input").on("change", (e) => {
+          save.transcension[index][0] = e.target.value;
+          write();
+        });
+        row.find(".upgrades input").on("change", (e) => {
+          save.transcension[index][1] = e.target.value;
+          write();
+        });
+
+        $("#transcensionTable tbody").append(row);
+      });
+  }
+
+  const armorySequence = [
+    "sword",
+    "staff",
+    "Bow",
+    "Hammer",
+    "Trinket",
+    "Book",
+    "Quiver",
+    "Ring",
+    "Shield",
+    "Cape",
+    "Arrows",
+    "Banner",
+    "Greaves",
+    "Wand",
+    "Gloves",
+    "Tome",
+    "Legends",
+    "Champions",
+    "Challengers",
+  ];
+
+  $("#input").on("change", ({ target: { value } }) => {
+    try {
+      window.Save = JSON.parse(
+        AES.decrypt(value, "gwFgN").toString(enc.Utf8)
+      );
+      const save = window.Save
+
+      console.log(save);
+      $("#gold").val(save.gold || 0);
+      $("#highestFloor").val(save.highestFloor || 0);
+      $("#heroLevel").val(save.level || 0);
+      $("#ascPerk").val(Number(save.perkPoints || '0'));
+      $("#transPerk").val(Number(save.transcensionPerkPoints || '0'));
+      write();
+
+      save.armory &&
+        save.armory.forEach((value, index) => {
+          const id = "#" + armorySequence[index];
+          if (index > 11) {
+            $(id).prop("checked", value === "1");
+            $(id).on("change", ({ target }) => {
+              save.armory[index] = target.checked ? "1" : "0";
+              write();
+            });
+          } else {
+            $(id).val(Number(value));
+            $(id).on("change", ({ target }) => {
+              save.armory[index] = String(target.value);
+              write();
+            });
+          }
+        });
+    } catch (err) {
+      alert("Error: Invalid save game!\n\n" + err);
+    }
+  });
+
+  $("#addAsc").on("click", () => {
+    window.Save.ascension = [
+      ...(window.Save.ascension || []),
+      [1, 1, 0, 0, 0],
+    ];
+    write();
+  });
+
+  $("#addTranscension").on("click", () => {
+    window.Save.transcension = [
+      ...(window.Save.transcension || []),
+      [1, 1, window.Save.tickClock],
+    ];
+    write();
+  });
+
+  $("#offline1h").on("click", () => {
+    window.Save.lastTimeStamp -= 3600000;
+    write();
+  });
+  $("#offline6h").on("click", () => {
+    window.Save.lastTimeStamp -= 6 * 3600000;
+    write();
+  });
+  $("#offline12h").on("click", () => {
+    window.Save.lastTimeStamp -= 12 * 3600000;
+    write();
+  });
+  $("#offline24h").on("click", () => {
+    window.Save.lastTimeStamp -= 24 * 3600000;
+    write();
+  });
+  $("#offline48h").on("click", () => {
+    window.Save.lastTimeStamp -= 48 * 3600000;
+    write();
+  });
+
+  $("#gold").on("change", ({ target }) => {
+    window.Save.gold -= target.value;
+    write();
+  });
+
+  $("#highestFloor").on("change", ({ target }) => {
+    window.Save.highestFloor = String(target.value);
+    write();
+  });
+
+  $("#heroLevel").on("change", ({ target }) => {
+    window.Save.level = String(target.value);
+    write();
+  });
+
+  $("#ascPerk").on("change", ({ target }) => {
+    window.Save.perkPoints = String(target.value);
+    write();
+  });
+
+  $("#transPerk").on("change", ({ target }) => {
+    window.Save.transcensionPerkPoints = String(target.value);
+    write();
+  });
+</script>
+
+</html>
