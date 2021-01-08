@@ -1,4 +1,4 @@
 # IncrementalAdventuresSaveEditor
 A save game editor for incremental Adventures
 
-see [https://fochlac.github.io/IncrementalAdventuresSaveEditor/]
+see https://fochlac.github.io/IncrementalAdventuresSaveEditor/
