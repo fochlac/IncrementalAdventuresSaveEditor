@@ -7,6 +7,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/aes.min.js"></script>
   <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script async defer src="https://buttons.github.io/buttons.js"></script>
   <style>
     body {
       display: flex;
@@ -101,8 +102,30 @@
       left: 0;
       display: flex;
       justify-content: space-between;
+      box-sizing: border-box;
     }
 
+    div#policy {
+      position: fixed;
+      background: #0a0a0aad;
+      bottom: 0;
+      top: 0;
+      left: 0;
+      right: 0;
+      padding: 15%;
+      display: none;
+      cursor: pointer;
+    }
+
+    #policy>p {
+      background: white;
+      margin: 0;
+      padding: 10px;
+    }
+
+    #showPolicy {
+      cursor: pointer;
+    }
   </style>
 </head>
 
@@ -289,15 +312,55 @@
   </div>
   <div id="footer">
     <div>
-      <span>Source: </span>
-      <a href="https://github.com/fochlac/IncrementalAdventuresSaveEditor/">
-        https://github.com/fochlac/IncrementalAdventuresSaveEditor/
-      </a>
-
+      <a class="github-button" href="https://github.com/fochlac/IncrementalAdventuresSaveEditor/"
+        aria-label="fochlac/IncrementalAdventuresSaveEditor on GitHub">Repository</a>
+      <a class="github-button" href="https://github.com/fochlac/IncrementalAdventuresSaveEditor/issues"
+        data-icon="octicon-issue-opened" aria-label="Issue fochlac/IncrementalAdventuresSaveEditor on GitHub">Issue</a>
+      <a class="github-button" href="https://github.com/fochlac/IncrementalAdventuresSaveEditor"
+        data-icon="octicon-star" aria-label="Star fochlac/IncrementalAdventuresSaveEditor on GitHub">Star</a>
     </div>
+    <span id="fc-27822"></span>
+    <script>
+      var fcr = Math.floor(Math.random() * 99999999999);
+      var _fcc = _fcc || []; _fcc.push(["27822"]); _fcc.push(["trans"]); (function () {
+        var fc = document.createElement("script"); fc.async = true;
+        fc.src = "https://www.fastcounter.de/fcount.php?rnd=" + fcr;
+        var sc = document.getElementById("fc-27822");
+        sc.appendChild(fc);
+      })();</script>
+    <noscript>
+      <a href="https://www.fastcounter.de/stats/27822/dashboard" rel="nofollow" style="display: none;" target="_blank"
+        title="Echtzeit-Counter"><img src="https://www.fastcounter.de/fcounter.php?id=27822;" alt="Echtzeit-Counter"
+          title="Echtzeit-Counter"></a>
+    </noscript>
+    <span id="showPolicy">Privacy Policy</span>
+  </div>
+  <div id='policy'>
+    <p>Unsere Website verwendet den Besucherzähler Fastcounter. Betreiber von Fastcounter ist der Stefan Dreher,
+      Tulpenweg 31, 24837 Schleswig, Deutschland. Fastcounter ist ein kostenloser Besucherzähler, welcher die Besucher
+      und Seitenaufrufe auf dieser Internetseite analysiert und auswertet. Dabei werden IP-Adresse, Datum und Uhrzeit
+      der Anfrage, Browsertyp, Browsersprache, Bildschirmauflösung, Referrer und Gerätetyp ausgelesen und an den
+      Betreiber von Fastcounter übertragen. Alle Daten werden SSL-verschlüsselt übertragen und selbstverständlich nach
+      den Richtlinien der DSVGO vollständig anonymisiert und ausgewertet. Die IP-Adresse wird während der Übertragung
+      pseudonymisiert, sodass keine personenbezogenen Daten an den Betreiber von Fastcounter übermittelt werden.</p>
+    <p>Der Datenerhebung und -speicherung können Sie jederzeit mit Wirkung für die Zukunft widersprechen. Um einer
+      Datenerhebung und -speicherung Ihrer Besucherdaten für die Zukunft zu widersprechen, können Sie unter
+      nachfolgendem Link ein Opt-Out-Cookie von Fastcounter beziehen, dieser bewirkt, dass zukünftig keine Besucherdaten
+      Ihres Browsers bei Fastcounter erhoben und gespeichert werden: <a
+        href="https://www.fastcounter.de/de/privacy/27822.htm">https://www.fastcounter.de/de/privacy/27822.htm</a>.
+      Dadurch wird ein Opt-Out-Cookie mit dem Namen "privcookie" von Fastcounter gesetzt. Bitte löschen Sie diesen
+      Cookie nicht, solange Sie Ihren Widerspruch aufrecht erhalten möchten.</p>
+    <p>Weitere Informationen finden Sie in den Datenschutzbestimmungen von Fastcounter: <a
+        href="https://www.fastcounter.de/datenschutz.html">https://www.fastcounter.de/datenschutz.html</a>.</p>
   </div>
 </body>
 <script>
+  $('#showPolicy').on('click', () => {
+    $('#policy').css('display', 'block')
+  })
+  $('#policy').on('click', () => {
+    $('#policy').css('display', 'none')
+  })
   const { AES, enc } = CryptoJS;
   window.Save = "";
   const write = () => {
