@@ -521,7 +521,7 @@
   });
 
   $("#gold").on("change", ({ target }) => {
-    window.Save.gold -= target.value;
+    window.Save.gold = target.value;
     write();
   });
 
