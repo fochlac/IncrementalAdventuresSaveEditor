@@ -10,7 +10,26 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <meta name="google-site-verification" content="n_xNkjo1eVNAPGVIWuIl2LjZnYelG6D3B7PLtanTtEA" />
   <style>
+    @media (max-width: 750px) {
+        div.left {
+            flex-basis: 100%;
+            min-width: 100%;
+        }    
+        div.right {
+            flex-basis: 100%;
+            margin-left: 0;
+            min-width: 100%;
+        }
+        input {
+            width: 90px
+        }
+        .editor {
+            flex-wrap: wrap;
+        }
+    }
+
     body {
+      padding-bottom: 40px;
       display: flex;
       flex-direction: column;
       padding: 8px;
@@ -104,6 +123,7 @@
       display: flex;
       justify-content: space-between;
       box-sizing: border-box;
+      background: white;
     }
 
     div#policy {
