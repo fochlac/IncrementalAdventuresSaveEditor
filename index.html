@@ -11,11 +11,27 @@
   <script async defer src="https://buttons.github.io/buttons.js"></script>
   <meta name="google-site-verification" content="n_xNkjo1eVNAPGVIWuIl2LjZnYelG6D3B7PLtanTtEA" />
   <style>
+    html {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      overflow: hidden;
+    }
+    
     body {
-      padding-bottom: 40px;
       display: flex;
       flex-direction: column;
       padding: 8px;
+      padding-bottom: 40px;
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      overflow-y: auto;
+      overflow-x: hidden;
     }
 
     td {
@@ -146,6 +162,14 @@
         }
         div.editor {
             flex-wrap: wrap;
+        }
+    }
+    
+    
+    @media (max-width: 450px) {
+    
+        input {
+            width: 75px !important;
         }
     }
   </style>
