@@ -230,6 +230,7 @@
                     <button id="offline12h">12h</button>
                     <button id="offline24h">24h</button>
                     <button id="offline48h">48h</button>
+                    <button id="offline200h">200h</button>
                 </div>
                 <h4>Heros:</h4>
                 <div>
@@ -691,6 +692,11 @@
         window.Save.lastTimeStamp -= 48 * 3600000;
         write();
     });
+    $("#offline200h").on("click", () => {
+        window.Save.lastTimeStamp -= 200 * 3600000;
+        write();
+    });
+
 
     $("#gold").on("change", ({ target }) => {
         window.Save.gold = target.value;
