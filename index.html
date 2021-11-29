@@ -131,7 +131,12 @@
             width: 150px;
         }
 
-
+        #output {
+            cursor: default;
+            background-color: rgba(239, 239, 239, 0.3);
+            color: rgb(84, 84, 84);
+            border-color: rgba(118, 118, 118, 0.3);
+        }
 
         #footer {
             position: fixed;
@@ -216,7 +221,7 @@
         </div>
         <div class="right">
             <label for="output">Copy your new save game</label>
-            <textarea name="" id="output" cols="30" rows="5" disabled></textarea>
+            <textarea name="" id="output" cols="30" rows="5" readonly></textarea>
         </div>
     </div>
     <div class="editor flex-column">
@@ -726,6 +731,10 @@
     $("#to-pretty-print-checkbox").on("change", ({ target }) => {
         toPrettyPrint = (target.checked === true);
         renderJson();
+    });
+
+    $("#output").on("click", ({ target }) => {
+        $(target).select();
     });
 </script>
 
