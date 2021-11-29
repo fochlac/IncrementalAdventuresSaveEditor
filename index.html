@@ -2,14 +2,14 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Edit Incremental Adventures Save Game</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/crypto-js.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.0.0/aes.min.js"></script>
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script async defer src="https://buttons.github.io/buttons.js"></script>
-    <meta name="google-site-verification" content="n_xNkjo1eVNAPGVIWuIl2LjZnYelG6D3B7PLtanTtEA" />
+    <meta name="google-site-verification" content="n_xNkjo1eVNAPGVIWuIl2LjZnYelG6D3B7PLtanTtEA">
     <style>
         html {
             position: absolute;
@@ -30,8 +30,7 @@
             bottom: 0;
             left: 0;
             right: 0;
-            overflow-y: auto;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         h2 {
@@ -61,9 +60,14 @@
             font-size: 20px;
         }
 
+        p {
+            margin: 4px 0 8px;
+        }
+
         textarea {
             width: 100%;
             max-width: 100%;
+            box-sizing: border-box;
         }
 
         #resetTimeButton {
@@ -72,13 +76,15 @@
 
         #json {
             height: 666px;
-            -moz-tab-size : 2;
-            -o-tab-size : 2;
-            tab-size : 2;
+            -moz-tab-size: 2;
+            -o-tab-size: 2;
+            tab-size: 2;
+            white-space: nowrap;
         }
 
         h4 {
             margin-bottom: 4px;
+            margin-top: 16px
         }
 
         .template {
@@ -87,10 +93,6 @@
 
         button {
             margin-top: 6px;
-        }
-
-        .top {
-            display: flex;
         }
 
         .left {
@@ -108,8 +110,57 @@
             display: flex;
         }
 
-        .editor.flex-column {
+        .editor-area {
+            overflow: hidden;
+        }
+
+        .tab-area {
+            display: flex;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .flex-column {
+            display: flex;
             flex-direction: column;
+        }
+
+        .flex-row {
+            display: flex;
+            flex-direction: row;
+        }
+
+        .tab-bar {
+            border-bottom: solid 1px;
+        }
+
+        .tab {
+            margin-left: 8px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border: solid 1px;
+            border-top-left-radius: 4px;
+            border-top-right-radius: 4px;
+            border-color: rgb(100, 100, 100);
+            color: rgb(100, 100, 100);
+            border-bottom-color: black;
+            margin-bottom: -1px;
+            margin-top: 8px;
+        }
+
+        .tab.active {
+            border-color: black;
+            color: black;
+            cursor: default;
+            border-bottom-color: white;
+        }
+
+        #json {
+            margin-top: 8px;
+        }
+
+        .hidden {
+            display: none;
         }
 
         input[type="checkbox"]+label {
@@ -129,13 +180,6 @@
         input {
             text-align: center;
             width: 150px;
-        }
-
-        #output {
-            cursor: default;
-            background-color: rgba(239, 239, 239, 0.3);
-            color: rgb(84, 84, 84);
-            border-color: rgba(118, 118, 118, 0.3);
         }
 
         #footer {
@@ -171,6 +215,13 @@
 
         #showPolicy {
             cursor: pointer;
+        }
+
+        #output {
+            cursor: default;
+            background-color: rgba(239, 239, 239, 0.3);
+            color: rgb(84, 84, 84);
+            border-color: rgba(118, 118, 118, 0.3);
         }
 
         @media (max-width: 750px) {
@@ -224,12 +275,18 @@
             <textarea name="" id="output" cols="30" rows="5" readonly></textarea>
         </div>
     </div>
-    <div class="editor flex-column">
-        <div class="top">
+    <div class="editor-area flex-column">
+        <div class="flex-row tab-bar">
+            <h4 class="tab active" data-for="editor-tab">Default Editor</h4>
+            <h4 class="tab" data-for="json-tab">JSON Editor (advanced)</h4>
+        </div>
+        <div id="editor-tab" class="tab-area">
             <div class="left">
-                <h4>Offline time: <span id="offline"></span></h4>
+                <h4>Offline time:
+                    <span id="offline"></span>
+                </h4>
                 <div>
-                    <label for="">Add: </label>
+                    <label for="">Add:</label>
                     <button id="offline1h">1h</button>
                     <button id="offline6h">6h</button>
                     <button id="offline12h">12h</button>
@@ -239,15 +296,14 @@
                 </div>
                 <h4>Heros:</h4>
                 <div>
-                    <label for="highestFloor">Highest Floor (increases stats +
-                        count)</label>
-                    <input type="text" id="highestFloor" />
+                    <label for="highestFloor">Highest Floor (increases stats + count)</label>
+                    <input type="text" id="highestFloor">
                     <label for="heroLevel">Level</label>
-                    <input type="text" id="heroLevel" />
+                    <input type="text" id="heroLevel">
                 </div>
                 <h4>Change Gold:</h4>
                 <div>
-                    <input type="text" id="gold" />
+                    <input type="text" id="gold">
                 </div>
                 <div>
                     <h4>Armory:</h4>
@@ -264,87 +320,88 @@
                             <tr>
                                 <td>
                                     <label for="sword">Sword</label>
-                                    <input type="number" min="0" step="1" id="sword" />
+                                    <input type="number" min="0" step="1" id="sword">
                                 </td>
                                 <td>
                                     <label for="staff">Staff</label>
-                                    <input type="number" min="0" step="1" id="staff" />
+                                    <input type="number" min="0" step="1" id="staff">
                                 </td>
                                 <td>
                                     <label for="Bow">Bow</label>
-                                    <input type="number" min="0" step="1" id="Bow" />
+                                    <input type="number" min="0" step="1" id="Bow">
                                 </td>
                                 <td>
                                     <label for="Hammer">Hammer</label>
-                                    <input type="number" min="0" step="1" id="Hammer" />
+                                    <input type="number" min="0" step="1" id="Hammer">
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <label for="Shield">Shield</label>
-                                    <input type="number" min="0" step="1" id="Shield" />
+                                    <input type="number" min="0" step="1" id="Shield">
                                 </td>
                                 <td>
                                     <label for="Cape">Cape</label>
-                                    <input type="number" min="0" step="1" id="Cape" />
+                                    <input type="number" min="0" step="1" id="Cape">
                                 </td>
                                 <td>
                                     <label for="Arrows">Arrows</label>
-                                    <input type="number" min="0" step="1" id="Arrows" />
+                                    <input type="number" min="0" step="1" id="Arrows">
                                 </td>
                                 <td>
                                     <label for="Banner">Banner</label>
-                                    <input type="number" min="0" step="1" id="Banner" />
+                                    <input type="number" min="0" step="1" id="Banner">
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <label for="Trinket">Trinket</label>
-                                    <input type="number" min="0" max="10" step="1" id="Trinket" />
+                                    <input type="number" min="0" max="10" step="1" id="Trinket">
                                 </td>
                                 <td>
                                     <label for="Book">Book</label>
-                                    <input type="number" min="0" max="10" step="1" id="Book" />
+                                    <input type="number" min="0" max="10" step="1" id="Book">
                                 </td>
                                 <td>
                                     <label for="Quiver">Quiver</label>
-                                    <input type="number" min="0" max="10" step="1" id="Quiver" />
+                                    <input type="number" min="0" max="10" step="1" id="Quiver">
                                 </td>
                                 <td>
                                     <label for="Ring">Ring</label>
-                                    <input type="number" min="0" max="10" step="1" id="Ring" />
+                                    <input type="number" min="0" max="10" step="1" id="Ring">
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="checkbox" id="Greaves" />
+                                    <input type="checkbox" id="Greaves">
                                     <label for="Greaves">Greaves</label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" id="Wand" />
+                                    <input type="checkbox" id="Wand">
                                     <label for="Wand">Wand</label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" id="Gloves" />
+                                    <input type="checkbox" id="Gloves">
                                     <label for="Gloves">Gloves</label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" id="Tome" />
+                                    <input type="checkbox" id="Tome">
                                     <label for="Tome">Tome</label>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
-                                    <input type="checkbox" id="Challengers" />
+                                    <input type="checkbox" id="Challengers">
                                     <label for="Challengers">Heirloom of
                                         Challengers</label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" id="Champions" />
-                                    <label for="Champions">Heirloom of Champions</label>
+                                    <input type="checkbox" id="Champions">
+                                    <label for="Champions">Heirloom of
+                                        Champions</label>
                                 </td>
                                 <td>
-                                    <input type="checkbox" id="Legends" />
+                                    <input type="checkbox" id="Legends">
                                     <label for="Legends">Heirloom of Legends</label>
                                 </td>
                                 <td></td>
@@ -357,8 +414,7 @@
                 <div>
                     <h4>Ascension Layers:</h4>
                     <label for="ascPerk">Perk Points</label>
-                    <input type="number" min="0" step="1" id="ascPerk" />
-
+                    <input type="number" min="0" step="1" id="ascPerk">
                     <table id="ascTable">
                         <thead>
                             <tr>
@@ -375,7 +431,7 @@
                 <div>
                     <h4>Transcension Layers:</h4>
                     <label for="transPerk">Perk Points</label>
-                    <input type="number" min="0" max="1e+25" step="1" id="transPerk" />
+                    <input type="number" min="0" max="1e+25" step="1" id="transPerk">
                     <table id="transcensionTable">
                         <thead>
                             <tr>
@@ -391,38 +447,42 @@
                 <table class="template">
                     <tr class="asc-row">
                         <td class="layer"></td>
-                        <td class="points"><input type="text" /></td>
-                        <td class="upgrades"><input type="text" /></td>
-                        <td class="autobuyer"><input type="checkbox" /></td>
+                        <td class="points">
+                            <input type="text">
+                        </td>
+                        <td class="upgrades">
+                            <input type="text">
+                        </td>
+                        <td class="autobuyer">
+                            <input type="checkbox">
+                        </td>
                     </tr>
                 </table>
             </div>
         </div>
-        <div class="bottom">
-            <div class="top">
-                <div class="left">
-                    <label for="json">JSON</label>
-                </div>
-                <div class="right">
-                    <input type="checkbox" id="to-pretty-print-checkbox">
-                    <label for="to-pretty-print-checkbox" style="display: inline-block;">Pretty-print</label>
-                </div>
-            </div>
-            <div class="bottom">
-                <textarea id="json"></textarea>
-            </div>
+        <div id="json-tab" class="flex-column tab-area hidden">
+            <textarea id="json"></textarea>
+            <div class="flex-row">
+                <input type="checkbox" id="to-pretty-print-checkbox" checked>
+                <label for="to-pretty-print-checkbox" style="display:
+                        inline-block">Pretty-print
+                </label>
+            </div>            
         </div>
     </div>
     <div id="footer">
         <div>
             <a class="github-button" href="https://github.com/fochlac/IncrementalAdventuresSaveEditor/" aria-label="fochlac/IncrementalAdventuresSaveEditor on
-                    GitHub">Repository</a>
+                    GitHub">Repository
+            </a>
             <a class="github-button" href="https://github.com/fochlac/IncrementalAdventuresSaveEditor/issues"
                 data-icon="octicon-issue-opened" aria-label="Issue fochlac/IncrementalAdventuresSaveEditor on
-                    GitHub">Issue</a>
+                    GitHub">Issue
+            </a>
             <a class="github-button" href="https://github.com/fochlac/IncrementalAdventuresSaveEditor"
                 data-icon="octicon-star" aria-label="Star fochlac/IncrementalAdventuresSaveEditor on
-                    GitHub">Star</a>
+                    GitHub">Star
+            </a>
         </div>
         <span id="fc-27822"></span>
         <script>
@@ -440,8 +500,10 @@
         </script>
         <noscript>
             <a href="https://www.fastcounter.de/stats/27822/dashboard" rel="nofollow" style="display: none"
-                target="_blank" title="Echtzeit-Counter"><img src="https://www.fastcounter.de/fcounter.php?id=27822;"
-                    alt="Echtzeit-Counter" title="Echtzeit-Counter" /></a>
+                target="_blank" title="Echtzeit-Counter">
+                <img src="https://www.fastcounter.de/fcounter.php?id=27822;" alt="Echtzeit-Counter"
+                    title="Echtzeit-Counter">
+            </a>
         </noscript>
         <span id="showPolicy">Privacy Policy</span>
     </div>
@@ -481,9 +543,9 @@
             dieser
             bewirkt, dass zukünftig keine Besucherdaten Ihres Browsers bei
             Fastcounter erhoben und gespeichert werden:
-            <a
-                href="https://www.fastcounter.de/de/privacy/27822.htm">https://www.fastcounter.de/de/privacy/27822.htm</a>.
-            Dadurch wird ein Opt-Out-Cookie mit dem Namen "privcookie" von
+            <a href="https://www.fastcounter.de/de/privacy/27822.htm">https://www.fastcounter.de/de/privacy/27822.htm
+            </a>
+            . Dadurch wird ein Opt-Out-Cookie mit dem Namen "privcookie" von
             Fastcounter gesetzt. Bitte löschen Sie diesen Cookie nicht,
             solange Sie
             Ihren Widerspruch aufrecht erhalten möchten.
@@ -492,11 +554,23 @@
             Weitere Informationen finden Sie in den Datenschutzbestimmungen
             von
             Fastcounter:
-            <a href="https://www.fastcounter.de/datenschutz.html">https://www.fastcounter.de/datenschutz.html</a>.
+            <a href="https://www.fastcounter.de/datenschutz.html">https://www.fastcounter.de/datenschutz.html
+            </a>
+            .
         </p>
     </div>
 </body>
 <script>
+    $(".tab").on('click', (e) => {
+        if (!e.target.classList.contains('active')) {
+            const id = e.target.dataset.for
+            $('.tab.active').removeClass('active')
+            $(e.target).addClass('active')
+            $('.tab-area').addClass('hidden')
+            $(`#${id}`).removeClass('hidden')
+        }
+    });
+
     $("#showPolicy").on("click", () => {
         $("#policy").css("display", "block");
     });
@@ -509,13 +583,13 @@
     /**
      * @type {boolean} [toPrettyPrint] whether to pretty-print or not
      */
-    let toPrettyPrint = false;
+    let toPrettyPrint = true;
 
     const write = () => {
         $("#offline").html(
             Math.min(
                 Math.round((Date.now() - window.Save.lastTimeStamp) / 3600000),
-                48
+                200
             )
         );
         $("#output").val(AES.encrypt(JSON.stringify(window.Save), "gwFgN"));
@@ -578,7 +652,25 @@
     function renderJson() {
         let json;
         if (toPrettyPrint === true) {
-            json = JSON.stringify(window.Save, null, "\t");
+            json = '{\n'
+            Object.keys(window.Save).forEach((key) => {
+                if (['ascension', 'transcension', 'prestige', 'combatLog', 'options', 'stats'].includes(key)) {
+                    json += '\t' + key + ': [\n\t\t'
+                    json += window.Save[key].map((arr) => {
+                        return JSON.stringify(arr)
+                    }).join('\n\t\t')
+                    json += '\n\t]'
+
+                }
+                else if (Array.isArray(window.Save[key]) && (typeof window.Save[key][0] !== 'object' || Array.isArray(window.Save[key][0]))) {
+                    json += '\t' + key + ': ' + JSON.stringify(window.Save[key]);
+                }
+                else {
+                    json += '\t' + key + ': ' + JSON.stringify(window.Save[key], null, '\t').split('\n').join('\n\t');
+                }
+                json += ',\n'
+            })
+            json += '}';
         } else {
             json = JSON.stringify(window.Save);
         }
@@ -597,22 +689,22 @@
         write();
 
         save.armory &&
-        save.armory.forEach((value, index) => {
-            const id = "#" + armorySequence[index];
-            if (index > 11) {
-                $(id).prop("checked", value === "1");
-                $(id).on("change", ({ target }) => {
-                    save.armory[index] = target.checked ? "1" : "0";
-                    write();
-                });
-            } else {
-                $(id).val(Number(value));
-                $(id).on("change", ({ target }) => {
-                    save.armory[index] = String(target.value);
-                    write();
-                });
-            }
-        });
+            save.armory.forEach((value, index) => {
+                const id = "#" + armorySequence[index];
+                if (index > 11) {
+                    $(id).prop("checked", value === "1");
+                    $(id).on("change", ({ target }) => {
+                        save.armory[index] = target.checked ? "1" : "0";
+                        write();
+                    });
+                } else {
+                    $(id).val(Number(value));
+                    $(id).on("change", ({ target }) => {
+                        save.armory[index] = String(target.value);
+                        write();
+                    });
+                }
+            });
     }
 
     const armorySequence = [
@@ -637,7 +729,7 @@
         "Challengers",
     ];
 
-    $("#input").on("change", ({ target: { value } }) => {
+    $("#input").on("input", ({ target: { value } }) => {
         try {
             window.Save = JSON.parse(
                 AES.decrypt(value, "gwFgN").toString(enc.Utf8)
@@ -651,14 +743,14 @@
     });
 
     $("#json").on("change", ({ target: { value } }) => {
-      try {
-          window.Save = JSON.parse(value);
+        try {
+            window.Save = JSON.parse(value);
 
-          console.log(window.Save);
-          updateUi();
-      } catch (err) {
-          alert("Error: Invalid save game!\n\n" + err);
-      }
+            console.log(window.Save);
+            updateUi();
+        } catch (err) {
+            alert("Error: Invalid json!\n\n" + err);
+        }
     });
 
     $("#addAsc").on("click", () => {
@@ -702,7 +794,6 @@
         write();
     });
 
-
     $("#gold").on("change", ({ target }) => {
         window.Save.gold = target.value;
         write();
@@ -729,7 +820,7 @@
     });
 
     $("#to-pretty-print-checkbox").on("change", ({ target }) => {
-        toPrettyPrint = (target.checked === true);
+        toPrettyPrint = target.checked === true;
         renderJson();
     });
 
@@ -737,5 +828,4 @@
         $(target).select();
     });
 </script>
-
 </html>
